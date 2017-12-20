@@ -1,7 +1,0 @@
-greet:
-    UserSays:
-     - hi
-     - yo
-     - yup
-
-     Annotations:
