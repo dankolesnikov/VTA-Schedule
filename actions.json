@@ -1,0 +1,20 @@
+{
+  "actions": [
+    {
+      "name": "MAIN",
+      "intent": {
+        "name": "actions.intent.MAIN"
+      },
+      "fulfillment": {
+        "conversationName": "main"
+      }
+    }
+  ],
+  "conversations": {
+    "main": {
+      "name": "main",
+      "url": "https://1fb3bc52.ngrok.io/assistant",
+      "fulfillmentApiVersion": 2
+    }
+  }
+}
