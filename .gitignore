@@ -1,8 +1,9 @@
 # Stuff
-creds.data
+creds
 gactions
+/.idea
+/__pycache__
 
-.__pycache__
 # User-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
