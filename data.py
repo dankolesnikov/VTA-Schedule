@@ -1,4 +1,20 @@
 
+
+
+
+# Keywords for NLP later
+GREETING_KEYWORDS = [
+    "hello", "hi", "greetings",
+    "hey", "whats up",
+    "talk to dash bus"]
+
+GREETING_RESPONSES = ["Hey commuter!", "Hello commuter!"]
+
+SCHEDULE_REQUESTS = ["schedule",
+                     "get schedule",
+                     'talk to dash bus to get schedule']
+
+
 # Dictionaries contain schedule(24 hour) for a particular station
 
 # From Diridon Station

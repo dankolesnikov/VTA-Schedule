@@ -15,11 +15,6 @@ print("Current time is: " + current_hour)
 if time.strftime("%w") is "0" or time.strftime("%w") == "6":
     isWeekend = True
 
-# Keywords for NLP later
-GREETING_KEYWORDS = ("hello", "hi", "greetings", "hey", "whats up", "talk to dash bus")
-GREETING_RESPONSES = ["Hey commuter!", "Hello commuter!"]
-SCHEDULE_REQUESTS = ["schedule", "get schedule", 'talk to dash bus to get schedule']
-
 
 # Concatenate a string of hours
 def create_string_hours(minutes) -> str:
@@ -74,10 +69,10 @@ def find_next(station, number = "1") -> str:
 def construct_response(tokens) -> str:
 
     for token in tokens:
-        if token in GREETING_KEYWORDS:  # If the user greeted us -> return a greeting
-            return random.choice(GREETING_RESPONSES)
+        if token in data.GREETING_KEYWORDS:  # If the user greeted us -> return a greeting
+            return random.choice(data.GREETING_RESPONSES)
 
-        if token in SCHEDULE_REQUESTS:  # User wants to see the schedule for the hour
+        if token in data.SCHEDULE_REQUESTS:  # User wants to see the schedule for the hour
             for station in tokens:
                 if station == 'diridon':
                     return create_string_hours(data.timeScheduleFromDiridon.get(current_hour))
@@ -124,7 +119,7 @@ def respond(sentence):
 def main():
     """CL User Interface"""
 
-    print(random.choice(GREETING_RESPONSES))
+    print(random.choice(data.GREETING_RESPONSES))
     while True:
         user_input = input('How can I help?\n')
         if user_input == 'quit' or user_input == 'exit':
