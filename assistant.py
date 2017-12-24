@@ -51,7 +51,7 @@ def assist():
         log.info('Message sent: ' + response)
         return construct_json(response)
     elif response is None:
-        log.debug('Message failed to send')
+        log.warning('Message failed to send')
         return construct_json("I don't get that yet!")
 
 
@@ -101,9 +101,11 @@ def get_time():
     log.info('Time: %s', result)
     return result
 
-
+@flask.route('/logs', methods=['GET','POST'])
+def get_logs():
+    return log
 
 
 # Start the server
 if __name__ == '__main__':
-    flask.run(debug=True, host='0.0.0.0', port=5000)
+    flask.run(debug=True, host='0.0.0.0', port=8080)

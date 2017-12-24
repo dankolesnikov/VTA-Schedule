@@ -60,7 +60,7 @@ def create_string_hours(minutes) -> str:
     for minute in minutes:
         temp = format_ampm(minute) + ', '
         result += temp
-    return "Schedule for the next hour is: " + result
+    return "Schedule for the this hour is: " + result
 
 
 def format_ampm(time_24hour) -> str:
@@ -119,12 +119,16 @@ def construct_response(tokens) -> str:
             return 'What bus or light rail schedule you like to know about?'
         if token in data.SCHEDULE_REQUESTS:  # User wants to see the schedule for current hour for specific station
             for station in tokens:
-                if station == 'diridon':
-                    return create_string_hours(schedule.timeScheduleFromDiridonDash.get(current_hour))
-                elif station == 'school':
-                    return create_string_hours(schedule.timeScheduleFromSchoolDash.get(current_hour))
+                if station in data.STATIONS_LIST:
+                    for mode in tokens:
+                        if mode in data.MODE_LIST:
+                            if mode == 'dash':
+                                return create_string_hours(schedule.timeSchedule.get('dash').get(station).get(current_hour))
+                            elif mode == 'rail' or 'light_rail':
+                                for direction in tokens:
+                                    if direction in data.DIRECTION_LIST:
+                                        return create_string_hours(schedule.timeSchedule.get('rail').get(direction).get(station).get(current_hour))
 
-        # Real stuff begins
         elif token in data.MODE_LIST:  # Mode of transportation and station were entered
             temp_mode = token
             context.mode = token  # Set the context
@@ -143,34 +147,33 @@ def construct_response(tokens) -> str:
         elif token in data.DIRECTION_LIST:  # Check is user indicated direction of travel
             temp_direction = token
             context.direction = token
-            print(context.is_ready('rail'))
             if context.get_state_rail():  # Check if we all vars are ready for rail departure
                 log.info("Rail's state: %s", context.is_ready('rail'))
                 context.reset()
                 return find_next(temp_mode, temp_station, temp_direction, '2')  # Return next 2 departures
             else:
-                log.debug('Error in the end', context.is_ready('rail'))
-                return 'Opps! Something went wrong.'
+                log.info('Error in the end', context.is_ready('rail'))
+                return 'Opps! Something went wrong. Try again!'
 
 
 def tokenize(sentence):
     """Takes a string and returns a list of tokens using NLTK"""
     tokens = nltk.casual_tokenize(sentence, preserve_case = False)  # Tokenize the input, all lowercase
     list = post_process(tokens)
+    list.append(sentence)
     log.info("Tokens: %s", list)
     return list
 
-def post_process(sentence):
+def post_process(tokens):
+    '''Performs Named Entity Recognition on the set of tokens to find station and directions that contain 2 words.
+    \post_process will concatenate with the following word using underscore'''
     index = 0
     result = list([])
-    for word in sentence:
-        if word in data.NER_KEYWORDS: # if the word is part of Entin
-            result.append(word+'_'+sentence[index+1])
+    for word in tokens:
+        if word in data.NER_KEYWORDS: # if the word is part of the entities list
+            result.append(word + '_' + tokens[index+1])
         else:
-            try:
-                result.append(word)
-            except IndexError:
-                pass
+            result.append(word)
         index += 1
     return result
 
@@ -207,7 +210,7 @@ def main():
 
 
 # Run CL UI, disable when deploying
-main()
+#main()
 
 
 

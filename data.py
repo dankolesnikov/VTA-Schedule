@@ -4,7 +4,10 @@
 GREETING_KEYWORDS = [
     "hello", "hi", "greetings",
     "hey", "whats up",
-    "talk to vta bot"]
+    "talk to vta bot",
+    'Talk to VTA Bot',
+    'talk to vta chat bot',
+    'talk to vta chatbot']
 
 # Reply with these words if the user greeted us
 GREETING_RESPONSES = ["Hey commuter!", "Hello commuter!"]

@@ -6,3 +6,33 @@ Response was returned: What direction are you going?
 Tokens: ['winchester']
 Rail's state: Rail is ready!
 Response was returned: Departure from diridon station at: 6:23 PM and 6:57 PM
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Tokens: ['schedule', 'from', 'diridon', 'on', 'dash', 'bus']
+Response was returned: Schedule for the next hour is: 6:06 PM, 6:22 PM, 6:48 PM, 6:22 PM, 6:48 PM, 
+Tokens: ['schedule', 'from', 'diridon', 'on', 'rail', 'towards', 'winchester']
+Response was returned: Schedule for the next hour is: 6:09 PM, 6:23 PM, 6:57 PM, 6:58 PM, 
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Tokens: ['light_rail', 'rail', 'from', 'diridon']
+Response was returned: What direction are you going?
+Tokens: ['winchester']
+Rail's state: Rail is ready!
+Response was returned: Departure from diridon station at: 6:23 PM and 6:57 PM
+Tokens: ['hey']
+Response was returned: What bus or light rail schedule you like to know about?
+Tokens: ['dash', 'bus', 'from', 'diridon']
+Dash's state: Dash is ready!
+Response was returned: Departure from diridon station at: 6:22 PM and 6:48 PM
+Tokens: ['hey']
+Response was returned: What bus or light rail schedule you like to know about?
+Tokens: ['light_rail', 'rail', 'from', 'diridon']
+Response was returned: What direction are you going?
+Tokens: ['winchester']
+Rail's state: Rail is ready!
+Response was returned: Departure from diridon station at: 6:23 PM and 6:57 PM
