@@ -1,14 +1,14 @@
-import random
 import nltk
 import time
 import logging
 import data
+import schedule
+import pytz
 from pytz import timezone
 from datetime import datetime
-import pytz
 from state import State
 
-
+# Initialize vars
 current_time = ''
 current_hour = ''
 current_minute = ''
@@ -35,26 +35,24 @@ def set_time():
     current_minute = pst_dt.strftime("%M")
     current_minute = '20'
 
+# Logger setup
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
+handler = logging.FileHandler('logs.log')
+handler.setLevel(logging.INFO)
+log.addHandler(handler)
+
+
+# Print current time
 set_time()
-
-
-print(f'Current time: {current_time}\nCurrent hour: {current_hour}\nCurrent minute: {current_minute}')
+time_data = f'Current time: {current_time}\nCurrent hour: {current_hour}\nCurrent minute: {current_minute}'
+log.info("Time data: %s", time_data)
 isWeekend = False
 
 # Check is today is a weekend
 if time.strftime("%w") is "0" or time.strftime("%w") == "6":
     isWeekend = True
 
-# Logger setup
-logging.basicConfig(level=logging.INFO)
-log = logging.getLogger(__name__)
-
-# create a file handler
-handler = logging.FileHandler('logs.log')
-handler.setLevel(logging.INFO)
-
-# add the handlers to the logger
-log.addHandler(handler)
 
 def create_string_hours(minutes) -> str:
     """Helper method to create a string of departures from a list"""
@@ -67,20 +65,20 @@ def create_string_hours(minutes) -> str:
 
 def format_ampm(time_24hour) -> str:
     """Convert 24 hour to 12 hour system"""
-    t = time.strptime(time_24hour, "%H%M") # Create time object
-    timevalue_12hour = time.strftime("%-I:%M %p", t) # e.g. From 08:14 to 8:14 AM or 15:24 to 3:24 PM
+    t = time.strptime(time_24hour, "%H%M")  # Create time object
+    timevalue_12hour = time.strftime("%-I:%M %p", t)  # e.g. From 08:14 to 8:14 AM or 15:24 to 3:24 PM
     return timevalue_12hour
 
 
 def find_next(mode, station, direction, number = "1") -> str:
     """Return 1 or 2 next departures from a particular station
         Create new recursive algorithm"""
-    station_schedule_dict = dict([]) # set a local dictionary depending on the station
+    station_schedule_dict = dict([])  # set a local dictionary depending on the station
 
     if mode == 'dash':
-        station_schedule_dict = data.timeSchedule.get('dash').get(station)
+        station_schedule_dict = schedule.timeSchedule.get('dash').get(station)
     elif mode == 'rail' or mode == 'light_rail':
-        station_schedule_dict = data.timeSchedule.get('rail').get(direction).get(station)
+        station_schedule_dict = schedule.timeSchedule.get('rail').get(direction).get(station)
 
     next_hour = str(int(current_hour) + 1)  # Next hour
     next_hour_struct = time.strptime(next_hour, "%H")
@@ -110,7 +108,7 @@ def find_next(mode, station, direction, number = "1") -> str:
 
 def construct_response(tokens) -> str:
     """ Construct and return a response based on tokenizes user input"""
-    set_time() # update time
+    set_time()  # update time
     global temp_mode
     global temp_direction
     global temp_station
@@ -122,34 +120,34 @@ def construct_response(tokens) -> str:
         if token in data.SCHEDULE_REQUESTS:  # User wants to see the schedule for current hour for specific station
             for station in tokens:
                 if station == 'diridon':
-                    return create_string_hours(data.timeScheduleFromDiridonDash.get(current_hour))
+                    return create_string_hours(schedule.timeScheduleFromDiridonDash.get(current_hour))
                 elif station == 'school':
-                    return create_string_hours(data.timeScheduleFromSchoolDash.get(current_hour))
+                    return create_string_hours(schedule.timeScheduleFromSchoolDash.get(current_hour))
 
         # Real stuff begins
-        elif token in data.MODE_LIST: # Mode of transportation and station were entered
+        elif token in data.MODE_LIST:  # Mode of transportation and station were entered
             temp_mode = token
-            context.mode = token # Set the context
+            context.mode = token  # Set the context
             for station in tokens:
                 if station in data.STATIONS_LIST:
                     temp_station = station
-                    context.station = station # Add to the context
-                    if context.get_state_dash(): # Check if all variable are ready for dash bus
+                    context.station = station  # Add to the context
+                    if context.get_state_dash():  # Check if all variable are ready for dash bus
                         log.info("Dash's state: %s", context.is_ready('dash'))
                         context.reset()
                         return find_next(temp_mode,temp_station,temp_direction, '2')
                     else:
-                        return 'What direction are you going?' # This must be a rail conversation
+                        return 'What direction are you going?'  # This must be a rail conversation
             return 'What station are you going?'
 
-        elif token in data.DIRECTION_LIST: # Check is user indicated direction of travel
+        elif token in data.DIRECTION_LIST:  # Check is user indicated direction of travel
             temp_direction = token
             context.direction = token
             print(context.is_ready('rail'))
-            if context.get_state_rail(): # Check if we all vars are ready for rail departure
+            if context.get_state_rail():  # Check if we all vars are ready for rail departure
                 log.info("Rail's state: %s", context.is_ready('rail'))
                 context.reset()
-                return find_next(temp_mode, temp_station, temp_direction, '2') # Return next 2 departures
+                return find_next(temp_mode, temp_station, temp_direction, '2')  # Return next 2 departures
             else:
                 log.debug('Error in the end', context.is_ready('rail'))
                 return 'Opps! Something went wrong.'
