@@ -3,9 +3,9 @@
 
 ![](pics/logo.jpg)
 
-## Conversantion UI
+## Conversational UI
 
-Conversaion I(bus schedule):
+Conversation I(bus schedule):
 * User: Talk to VTA ChatBot
 * Bot: What bus or light rail schedule you'd like to know about?
 * User: Dash bus from diridon
@@ -35,7 +35,7 @@ To be added:
     ├── data.py                 # Contains data for NLP
     ├── schedule.py             # Contains schedule for buses and light rail
     ├── state.py                # Helper class to maintain the state of the app
-    ├── requirements.txt        # List of module for Google App Engine
+    ├── requirements.txt        # List of modules for Google App Engine
     ├── actions.json            # Google Actions file
     └── pics                    # Pictures
     
