@@ -1,13 +1,32 @@
 from flask import Flask, jsonify, request
 import app
 import logging
+from pytz import timezone
+from datetime import datetime
+import pytz
+import time
 
 # Intents:
-# "Ok Google, talk to Dash Bus"
-# "Ok Google, talk to Dash Bus to get schedule"
-# "Ok Google, talk to Dash Bus to get next departure from diridon/school"
-# "Ok Google, talk to Dash Bus to get 2 next departure from diridon/school"
-# Google command to update actions.json: ./gactions update --action_package actions.json --project dashbot-f965e
+# "Ok Google, talk to vta bot"
+# "Ok Google, talk to vta bot to get schedule"
+# "Ok Google, talk to vta bot to get next departure from diridon/school"
+# "Ok Google, talk to vta bot to get 2 next departure from diridon/school"
+# Google command to update actions.json: ./gactions update --action_package actions.json --project vta-bot
+#
+# Conversation example with Dash Bus:
+# User: Ok Google, talk to vta bot
+# Bot: What bus or light rail schedule you'd like to know about?
+# User: Dash bus from diridon {mode} and {station}
+# Bot: Next 2 departures from {school/diridon} on {dash bus} will occur at 2:40 PM and 2:50 PM
+#
+# Conversation example with Light rail:
+# User: Ok Google, talk to vta bot
+# Bot: What bus or light rail schedule you'd like to know about?
+# User: Light rail from diridon # {mode} {station}
+# Bot: What direction are going?
+# User: winchester {station}
+# Bot: Next 2 departures from {school/diridon} towards winchester will occur at 2:40 PM and 2:50 PM
+
 
 
 # Flask setup
@@ -67,6 +86,22 @@ def construct_json(message):
         ],
     }
     return jsonify(response)
+
+
+@flask.route('/time', methods=['GET','POST'])
+def get_time():
+    utc_dt = pytz.utc.localize(datetime.utcnow())
+    pst_tz = timezone('US/Pacific')
+    pst_dt = pst_tz.normalize(utc_dt.astimezone(pst_tz))
+    format = '%H%M'
+    current_time = pst_dt.strftime(format)
+    current_hour = pst_dt.strftime("%H")
+    current_minute = pst_dt.strftime("%M")
+    result = f"Current time: {current_time}"
+    log.info('Time: %s', result)
+    return result
+
+
 
 
 # Start the server

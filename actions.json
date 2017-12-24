@@ -13,7 +13,7 @@
   "conversations": {
     "main": {
       "name": "main",
-      "url": "https://1fb3bc52.ngrok.io/assistant",
+      "url": "https://vta-bot.appspot.com/assistant",
       "fulfillmentApiVersion": 2
     }
   }
