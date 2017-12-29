@@ -7,10 +7,6 @@ import pytz
 import time
 
 # Intents:
-# "Ok Google, talk to vta bot"
-# "Ok Google, talk to vta bot to get schedule"
-# "Ok Google, talk to vta bot to get next departure from diridon/school"
-# "Ok Google, talk to vta bot to get 2 next departure from diridon/school"
 # Google command to update actions.json: ./gactions update --action_package actions.json --project vta-bot
 #
 # Conversation example with Dash Bus:
@@ -41,14 +37,22 @@ log = logging.getLogger(__name__)
 @flask.route('/assistant', methods=['GET', 'POST'])
 def assist():
     """Receive JSON request from Google Assistant device, create response and send it back"""
-
     content = request.get_json()  # Get raw JSON
     query = content['inputs'][0]['rawInputs'][0]['query']  # JSON parsing to get the query
-    tokens = app.tokenize(query)  # NLP
-    response = app.construct_response(tokens)  # Check if there is a response
+    tokens: list = app.tokenize(query)  # NLP
+    response: str = app.construct_response(tokens)  # Check if there is a response
 
-    if response:  # If the response was constructed
-        log.info('Message sent: ' + response)
+    # Check of the user response is needed
+    response_tokens: list = app.tokenize(response)
+    user_response = True
+    if response_tokens[len(response_tokens)-1] == 'See you next time!':
+        user_response = False
+
+    if response and user_response is False:  # If the response was constructed and user response isn't expected
+        log.info('Message sent with user response not expected: %s', response)
+        return construct_json(response, False)
+    elif response and user_response is True:  # If the response was constructed
+        log.info('Message sent with user response expected: %s', response)
         return construct_json(response)
     elif response is None:
         log.warning('Message failed to send')
@@ -56,11 +60,28 @@ def assist():
 
 
 # Create a JSON constructor to respond to Google Assistant
-def construct_json(message):
+def construct_json(message, expect_response = True):
     """Returns a reply back to Google Assistant in the correct JSON format.
     JSON follows API 2 of Google Actions SDK"""
 
-    response = {
+    result_no_response_expected = {
+        "conversationToken": "",
+        "expectUserResponse": False,
+        "finalResponse": {
+            "richResponse": {
+                    "items": [
+                        {
+                        "simpleResponse": {
+                                    "textToSpeech": message,
+                                    "displayText": message
+                                }
+                        }
+                    ],
+            },
+        }
+    }
+
+    result_response_expected = {
         "conversationToken": "",
         "expectUserResponse": True,
         "expectedInputs": [
@@ -85,7 +106,11 @@ def construct_json(message):
             }
         ],
     }
-    return jsonify(response)
+
+    if expect_response is True:
+        return jsonify(result_response_expected)
+    else:
+        return jsonify(result_no_response_expected)
 
 
 @flask.route('/time', methods=['GET','POST'])
@@ -101,9 +126,16 @@ def get_time():
     log.info('Time: %s', result)
     return result
 
+
 @flask.route('/logs', methods=['GET','POST'])
 def get_logs():
     return log
+
+
+@flask.route('/policy', methods=['GET','POST'])
+def get_policy():
+    policy = 'VTA Bot Privacy Policy:\nAll of the data is collected to improve the chat bot. '
+    return policy
 
 
 # Start the server

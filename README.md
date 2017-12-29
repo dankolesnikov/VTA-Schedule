@@ -5,19 +5,19 @@
 
 ## Conversational UI
 
-Conversation I(bus schedule):
+Conversation I (bus schedule):
 * User: Talk to VTA ChatBot
 * Bot: What bus or light rail schedule you'd like to know about?
-* User: Dash bus from diridon
-* Bot: Next 2 departures will occur at 2:40 PM and 2:50 PM
+* User: Dash bus from Diridon station
+* Bot: Departures at 2:25 PM and 2:50 PM. Anything else I can help?
 
-Conversation II(light rail schedule:
+Conversation II (light rail schedule:
 * User: Talk to VTA ChatBot
 * Bot: What bus or light rail schedule you'd like to know about?
-* User: Light rail from fruitdale station
+* User: Light rail from Fruitdale station
 * Bot: What direction are you going?
 * User: Winchester
-* Bot: Next 2 departures will occur at 2:40 PM and 2:50 PM
+* Bot: Departures at 2:40 PM and 2:50 PM. Anything else I can help?
 
 ## Supported VTA Routes
 
@@ -34,7 +34,7 @@ To be added:
     ├── assistant.py            # Flask server for Google Assistant
     ├── data.py                 # Contains data for NLP
     ├── schedule.py             # Contains schedule for buses and light rail
-    ├── state.py                # Helper class to maintain the state of the app
+    ├── state.py                # Helper class to maintain the state of the conversation
     ├── requirements.txt        # List of modules for Google App Engine
     ├── actions.json            # Google Actions file
     └── pics                    # Pictures

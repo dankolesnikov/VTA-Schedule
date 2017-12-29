@@ -76,7 +76,7 @@ timeScheduleRailDirection = dict([])
 timeScheduleRailDirection['winchester'] = timeScheduleRailWinchester
 timeScheduleRailDirection['downtown'] = timeScheduleRailMtnView
 timeScheduleRailDirection['alum'] = []
-timeScheduleRailDirection['santa'] = []
+timeScheduleRailDirection['santa_teresa'] = timeScheduleRailWinchester
 
 # timeSchedule contains the dictionaries of 2
 timeSchedule = dict([])

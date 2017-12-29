@@ -5,7 +5,7 @@ GREETING_KEYWORDS = [
     "hello", "hi", "greetings",
     "hey", "whats up",
     "talk to vta bot",
-    'Talk to VTA Bot',
+    'Talk to VTA ChatBot',
     'talk to vta chat bot',
     'talk to vta chatbot']
 
@@ -38,6 +38,9 @@ DIRECTION_LIST = ['winchester',
                   'alum_rock']
 
 # List of transport modes
-MODE_LIST = ['dash', 'rail', 'light_rail']
+MODE_LIST = ['dash', 'rail', 'light_rail', 'light rail']
+
+
+EXIT_KEYWORDS = ['no', 'nope', 'exit', 'quit']
 
 

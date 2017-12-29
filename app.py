@@ -35,6 +35,7 @@ def set_time():
     current_minute = pst_dt.strftime("%M")
     current_minute = '20'
 
+
 # Logger setup
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -60,7 +61,7 @@ def create_string_hours(minutes) -> str:
     for minute in minutes:
         temp = format_ampm(minute) + ', '
         result += temp
-    return "Schedule for the this hour is: " + result
+    return f"Schedule for this hour is: {result}"
 
 
 def format_ampm(time_24hour) -> str:
@@ -77,7 +78,7 @@ def find_next(mode, station, direction, number = "1") -> str:
 
     if mode == 'dash':
         station_schedule_dict = schedule.timeSchedule.get('dash').get(station)
-    elif mode == 'rail' or mode == 'light_rail':
+    elif mode == 'rail' or mode == 'light_rail' or mode == 'rail':
         station_schedule_dict = schedule.timeSchedule.get('rail').get(direction).get(station)
 
     next_hour = str(int(current_hour) + 1)  # Next hour
@@ -86,13 +87,13 @@ def find_next(mode, station, direction, number = "1") -> str:
 
     try:
         current_schedule = station_schedule_dict.get(current_hour) + station_schedule_dict.get(next_hour_object)  # Concatenate the schedule of the current hour with the scheule of the next hour
-    except (IndexError, TypeError):
-        return "No departures!"
+    except (IndexError, TypeError, AttributeError):
+        return f"No departures!"
 
     if number == '1': # Return 1 departure
         for departure in current_schedule:
             if current_time < departure:
-                return 'Departure from '+ station +' station at: ' + format_ampm(departure)
+                return f'Departure from station at {format_ampm(departure)}. Anything else I can help?'
 
     if number == '2': # Return 2 departures
         index = 0 # Keep track of the current position in the array
@@ -100,9 +101,9 @@ def find_next(mode, station, direction, number = "1") -> str:
             if current_time < departure:
                 try:
                     next_departure = current_schedule[index + 1]
-                    return 'Departure from ' + station + ' station at: ' + format_ampm(departure) + " and " + format_ampm(next_departure)
-                except (IndexError, TypeError):
-                    return "No departures!"
+                    return f'Departures at: {format_ampm(departure)} and {format_ampm(next_departure)}. Anything else I can help?'
+                except (IndexError, TypeError, AttributeError):
+                    return f"No departures. Anything else I can help?"
             index += 1
 
 
@@ -137,45 +138,66 @@ def construct_response(tokens) -> str:
                     temp_station = station
                     context.station = station  # Add to the context
                     if context.get_state_dash():  # Check if all variable are ready for dash bus
-                        log.info("Dash's state: %s", context.is_ready('dash'))
+                        log.info("%s", context.status()) # Should be True
                         context.reset()
                         return find_next(temp_mode,temp_station,temp_direction, '2')
                     else:
+                        log.info("%s", context.status()) # Should be False
                         return 'What direction are you going?'  # This must be a rail conversation
-            return 'What station are you going?'
+            return 'What station are you going?' # No station was entered
 
-        elif token in data.DIRECTION_LIST:  # Check is user indicated direction of travel
+        elif token in data.DIRECTION_LIST:  # Check is user indicated direction of travel. Used only for rail
             temp_direction = token
             context.direction = token
-            if context.get_state_rail():  # Check if we all vars are ready for rail departure
-                log.info("Rail's state: %s", context.is_ready('rail'))
+            if context.get_state_rail():
+                log.info("%s", context.status())
                 context.reset()
                 return find_next(temp_mode, temp_station, temp_direction, '2')  # Return next 2 departures
             else:
-                log.info('Error in the end', context.is_ready('rail'))
-                return 'Opps! Something went wrong. Try again!'
+                log.info("Weird error! %s", context.status()) # This happens because mode and station are empty in the context!
+                context.reset()
+                return find_next(temp_mode, temp_station, temp_direction, '2')  # Return next 2 departures
+
+        elif token in data.STATIONS_LIST: # Edge case
+            temp_station = token
+            context.station = token
+            if context.get_state_dash():  # Check if all variable are ready for dash bus
+                log.info("%s", context.status())
+                context.reset()
+                return find_next(temp_mode, temp_station, temp_direction, '2')
+            else:
+                log.info("%s", context.status())
+                return 'What direction are you going?'  # This must be a rail conversation
+
+        elif token in data.EXIT_KEYWORDS:
+            return 'See you next time!'
+
 
 
 def tokenize(sentence):
     """Takes a string and returns a list of tokens using NLTK"""
     tokens = nltk.casual_tokenize(sentence, preserve_case = False)  # Tokenize the input, all lowercase
-    list = post_process(tokens)
-    list.append(sentence)
-    log.info("Tokens: %s", list)
-    return list
+    post_process(tokens)
+    tokens.append(sentence) # Needed for recognizing Talk to VTA Chat Bot phrase
+    log.info("Tokens: %s", tokens)
+    return tokens
 
-def post_process(tokens):
+
+def post_process(tokens: list):
     '''Performs Named Entity Recognition on the set of tokens to find station and directions that contain 2 words.
     \post_process will concatenate with the following word using underscore'''
+
+    if len(tokens) == 1:
+        return
+
     index = 0
-    result = list([])
+
     for word in tokens:
         if word in data.NER_KEYWORDS: # if the word is part of the entities list
-            result.append(word + '_' + tokens[index+1])
-        else:
-            result.append(word)
+            tokens.insert(index,word + '_' + tokens[index+1])
+            del(tokens[index+1]) # Needs to be performed twice
+            del(tokens[index+1])
         index += 1
-    return result
 
 
 def respond(sentence):
@@ -207,6 +229,8 @@ def main():
     else:
         log.debug('Error %s', response)
         main()
+
+
 
 
 # Run CL UI, disable when deploying
