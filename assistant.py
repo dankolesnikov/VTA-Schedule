@@ -56,7 +56,7 @@ def assist():
         return construct_json(response)
     elif response is None:
         log.warning('Message failed to send')
-        return construct_json("I don't get that yet!")
+        return construct_json("I don't get that yet! Anything else I can help?")
 
 
 # Create a JSON constructor to respond to Google Assistant

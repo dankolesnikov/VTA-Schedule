@@ -1,13 +1,12 @@
 # Keywords for NLP later
 
 # User greeted the bot with any of these
-GREETING_KEYWORDS = [
+ENGAGE_KEYWORDS = [
     "hello", "hi", "greetings",
     "hey", "whats up",
-    "talk to vta bot",
-    'Talk to VTA ChatBot',
-    'talk to vta chat bot',
-    'talk to vta chatbot']
+    "talk to vta schedule ",
+    'yes',
+    'Yes',]
 
 # Reply with these words if the user greeted us
 GREETING_RESPONSES = ["Hey commuter!", "Hello commuter!"]

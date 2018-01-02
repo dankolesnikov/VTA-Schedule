@@ -59,9 +59,9 @@ def create_string_hours(minutes) -> str:
     """Helper method to create a string of departures from a list"""
     result = ''
     for minute in minutes:
-        temp = format_ampm(minute) + ', '
+        temp = format_ampm(minute) + ' '
         result += temp
-    return f"Schedule for this hour is: {result}"
+    return f"Departures for this hour are: {result}Anything else I can help?"
 
 
 def format_ampm(time_24hour) -> str:
@@ -88,7 +88,7 @@ def find_next(mode, station, direction, number = "1") -> str:
     try:
         current_schedule = station_schedule_dict.get(current_hour) + station_schedule_dict.get(next_hour_object)  # Concatenate the schedule of the current hour with the scheule of the next hour
     except (IndexError, TypeError, AttributeError):
-        return f"No departures!"
+        return f"No departures! Anything else I can help?"
 
     if number == '1': # Return 1 departure
         for departure in current_schedule:
@@ -116,7 +116,7 @@ def construct_response(tokens) -> str:
     global context
 
     for token in tokens:
-        if token in data.GREETING_KEYWORDS:  # If the user greeted us -> return a greeting
+        if token in data.ENGAGE_KEYWORDS:  # If the user greeted us -> return a greeting
             return 'What bus or light rail schedule you like to know about?'
         if token in data.SCHEDULE_REQUESTS:  # User wants to see the schedule for current hour for specific station
             for station in tokens:
@@ -171,6 +171,7 @@ def construct_response(tokens) -> str:
 
         elif token in data.EXIT_KEYWORDS:
             return 'See you next time!'
+    return 'I dont know that yet.'
 
 
 
@@ -178,7 +179,7 @@ def tokenize(sentence):
     """Takes a string and returns a list of tokens using NLTK"""
     tokens = nltk.casual_tokenize(sentence, preserve_case = False)  # Tokenize the input, all lowercase
     post_process(tokens)
-    tokens.append(sentence) # Needed for recognizing Talk to VTA Chat Bot phrase
+    tokens.append(sentence.lower()) # Needed for recognizing Talk to VTA Chat Bot phrase
     log.info("Tokens: %s", tokens)
     return tokens
 
@@ -209,9 +210,9 @@ def respond(sentence):
     if response:  # If the response was constructed
         log.info("Response was returned: %s", response)
         return response
-    elif response is None: # No response
+    elif response == 'I dont know that yet.': # No response
         log.debug('Failed to respond. Tokens: $s', tokens)
-        return None
+        return 'I dont know that yet.'
 
 
 print('What bus or light rail schedule youd like to know about?')
@@ -226,11 +227,6 @@ def main():
     elif user_input == 'engage':
         print('What bus or light rail schedule youd like to know about?')
         main()
-    else:
-        log.debug('Error %s', response)
-        main()
-
-
 
 
 # Run CL UI, disable when deploying

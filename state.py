@@ -11,7 +11,7 @@ class State:
 
     def get_state_rail(self):
         '''Method verifies if everything is ready to return departures from rail'''
-        if self.mode == 'rail' or self.mode == 'light_rail' and self.station is not '' and self.direction is not '':
+        if (self.mode == 'rail' or self.mode == 'light_rail') and self.station is not '' and self.direction is not '':
             self.state_rail = True
         else:
             self.state_rail = False

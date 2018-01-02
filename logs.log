@@ -404,3 +404,73 @@ Response was returned: Departures from diridon station at: 6:23 PM and 6:57 PM
 Anything else I can help?
 Tokens: ['no', 'no']
 Response was returned: See you next time!
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Tokens: ['light_rail', 'from', 'diridon', 'light rail from diridon']
+Context status:  Mode: light_rail Station: diridon Direction:  Ready: False
+Response was returned: What direction are you going?
+Tokens: ['winchester', 'winchester']
+Context status:  Mode: light_rail Station: diridon Direction: winchester Ready: True
+Response was returned: Departures at: 6:23 PM and 6:57 PM. Anything else I can help?
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Tokens: ['light_rail', 'from', 'diridon', 'light rail from diridon']
+Context status:  Mode: light_rail Station: diridon Direction:  Ready: False
+Response was returned: What direction are you going?
+Tokens: ['winchester', 'winchester']
+Context status:  Mode: light_rail Station: diridon Direction: winchester Ready: True
+Response was returned: Departures at: 6:23 PM and 6:57 PM. Anything else I can help?
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Tokens: ['talk', 'to', 'vta', 'chatbot', 'to', 'get', 'schedule', 'for', 'dash', 'bus', 'from', 'diridon', 'station', 'Talk to VTA ChatBot to get schedule for dash bus from diridon station']
+Response was returned: Departures for this hour are: 6:06 PM, 6:22 PM, 6:48 PM, 6:22 PM, 6:48 PM, . Anything else I can help?
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Tokens: ['talk', 'to', 'vta', 'chatbot', 'to', 'get', 'schedule', 'for', 'dash', 'bus', 'from', 'diridon', 'station', 'Talk to VTA ChatBot to get schedule for dash bus from diridon station']
+Response was returned: Departures for this hour are: 6:06 PM 6:22 PM 6:48 PM 6:22 PM 6:48 PM . Anything else I can help?
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Tokens: ['talk', 'to', 'vta', 'chatbot', 'to', 'get', 'schedule', 'for', 'dash', 'bus', 'from', 'diridon', 'station', 'Talk to VTA ChatBot to get schedule for dash bus from diridon station']
+Response was returned: Departures for this hour are: 6:06 PM 6:22 PM 6:48 PM 6:22 PM 6:48 PM Anything else I can help?
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Tokens: ['talk', 'to', 'vta', 'chatbot', 'to', 'get', 'light_rail', 'schedule', 'from', 'diridon', 'station', 'Talk to VTA ChatBot to get light rail schedule from Diridon station']
+Context status:  Mode: light_rail Station: diridon Direction:  Ready: False
+Response was returned: What direction are you going?
+Tokens: ['talk', 'to', 'vta', 'chatbot', 'to', 'get', 'schedule', 'for', 'light_rail', 'from', 'diridon', 'station', 'Talk to VTA ChatBot to get schedule for light rail from Diridon station']
+Context status:  Mode: light_rail Station: diridon Direction:  Ready: False
+Response was returned: What direction are you going?
+Tokens: ['winchester', 'winchester']
+Context status:  Mode: light_rail Station: diridon Direction: winchester Ready: True
+Response was returned: Departures at: 6:23 PM and 6:57 PM. Anything else I can help?
+Tokens: ['talk', 'to', 'vta', 'chatbot', 'to', 'get', 'schedule', 'for', 'light_rail', 'from', 'diridon', 'station', 'towards', 'winchester', 'Talk to VTA ChatBot to get schedule for light rail from Diridon station towards winchester']
+Response was returned: Departures for this hour are: 6:09 PM 6:23 PM 6:57 PM 6:58 PM Anything else I can help?
+Tokens: ['next', 'departures', 'on', 'dash', 'bus', 'from', 'diridon', 'station', 'next departures on Dash bus from Diridon station']
+Context status:  Mode: dash Station: diridon Direction:  Ready: True
+Response was returned: Departures at: 6:22 PM and 6:48 PM. Anything else I can help?
+Tokens: ['']
+Response was returned: I dont know that yet.
+Tokens: ['next', 'departures', 'on', 'light_rail', 'from', 'diridon', 'station', 'next departures on light rail from Diridon station']
+Context status:  Mode: light_rail Station: diridon Direction:  Ready: False
+Response was returned: What direction are you going?
+Tokens: ['winchester', 'winchester']
+Context status:  Mode: light_rail Station: diridon Direction: winchester Ready: True
+Response was returned: Departures at: 6:23 PM and 6:57 PM. Anything else I can help?
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Tokens: ['talk', 'to', 'vta', 'schedule', 'to', 'get', 'next', 'departures', 'on', 'dash', 'bus', 'from', 'diridon', 'station', 'Talk to VTA Schedule to get next departures on Dash bus from Diridon station']
+Response was returned: Departures for this hour are: 6:06 PM 6:22 PM 6:48 PM 6:22 PM 6:48 PM Anything else I can help?
+Tokens: ['talk', 'to', 'vta', 'schedule', 'Talk to VTA Schedule']
+Response was returned: I dont know that yet.
+Time data: Current time: 1820
+Current hour: 18
+Current minute: 20
+Tokens: ['talk', 'to', 'vta', 'schedule', 'talk to vta schedule']
+Response was returned: I dont know that yet.
